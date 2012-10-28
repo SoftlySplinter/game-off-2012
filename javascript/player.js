@@ -1,12 +1,15 @@
 var gamejs = require('gamejs');
+var branchjs = require('./branch');
 
 var Player = function(maxY) {
     this.y = 0;
-    this.x = 20;
+    this.x = 50;
     this.prevY = 0;
     this.prevYs = [0,0,0,0,0,0,0];
     this.width = 4;
     this.maxY = maxY - 48;
+
+    this.branches = [];
 
     this.up = false;
     this.down = false;
@@ -28,6 +31,11 @@ var Player = function(maxY) {
             if(e.key === gamejs.event.K_DOWN) {
                 this.down = false;
             }
+
+            if(e.key === gamejs.event.K_b) {
+                var branch = new branchjs.Branch(this.maxY, this);
+                this.branches.push(branch);
+            }
         }
 
     };
@@ -46,13 +54,20 @@ var Player = function(maxY) {
         }
 
         this.prevYs.push(this.prevY);
-        if(this.prevYs.length > 7) {
+        if(this.prevYs.length > this.x / 3 + 1 ) {
             this.prevYs.shift();
         }
         this.prevY = this.y;
+
+        this.branches.forEach(function(branch) {
+            branch.update();
+        });
     };
 
     this.draw = function(surface) {
+        this.branches.forEach(function(branch) {
+            branch.draw(surface);
+        });
 
         gamejs.draw.circle(surface, '#000', [this.x, 48 + this.y], this.width);
 
@@ -61,7 +76,7 @@ var Player = function(maxY) {
         }
 
         gamejs.draw.circle(surface, '#fff', [this.x, 48 + this.y], this.width + 1, 2);
-//        gamejs.draw.line(surface, '#000', [0, 48 + this.y], [this.x - this.width - 2, 48 +this.y], 2);
+
     };
 };
 
