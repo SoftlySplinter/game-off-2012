@@ -3,18 +3,8 @@
 <head>
     <title>GameJS Application</title>
 <!-- Styling -->
+    <link rel="stylesheet" href="public/style.css" />
     <style type=text/css>
-        body{
-           background:#fff;
-           color:#222;
-           margin:1em 0 2em 6em;
-           padding:0;
-        }
-        #gjs-loader {
-            width: 50%;
-            height: 50%;
-            background: url('./public/ajax-loader.gif');
-        }
     </style>
 <!-- Start javascript/main.js -->
     <script src="./public/yabble.js"></script>
@@ -31,6 +21,14 @@
          Loading...
         </div>
         <canvas id="gjs-canvas"></canvas>
+        <h2>Instructions</h2>
+        <ul>
+            <li><strong><em>&uarr;</em> or <em>s</em></strong> Move up.</li>
+            <li><strong><em>&darr;</em> or <em>w</em></strong> Move down.</li>
+            <li><strong><em>space</em></strong> Shoot</li>
+            <li><strong><em>b</em></strong> Branch</li>
+            <li><strong><em>m</em></strong> Merge</li>
+        </ul>
     </div>
 </body>
 </html>
