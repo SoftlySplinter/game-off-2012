@@ -36,6 +36,10 @@ var Player = function(maxY) {
                 var branch = new branchjs.Branch(this.maxY, this);
                 this.branches.push(branch);
             }
+
+            if(e.key === gamejs.event.K_m) {
+                this.branches[this.branches.length - 1].merging = true;
+            }
         }
 
     };
