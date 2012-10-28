@@ -28,6 +28,7 @@ gamejs.ready(function () {
     }
 
     function prog(msDuration) {
+        player.update();
         progress++;
         return;
     }
