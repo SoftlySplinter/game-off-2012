@@ -1,6 +1,8 @@
 var gamejs = require('gamejs');
 var branchjs = require('./branch');
 
+var SPEED = 3;
+
 var Player = function(maxY) {
     this.y = 0;
     this.x = 50;
@@ -15,50 +17,56 @@ var Player = function(maxY) {
     this.down = false;
 
     this.handleEvent = function(e) {
-        if(e.type === gamejs.event.KEY_DOWN) {
-            if(e.key === gamejs.event.K_UP) {
+        switch(e.type) {
+        case gamejs.event.KEY_DOWN:
+            switch(e.key) {
+            case gamejs.event.K_UP:
+            case gamejs.event.K_w:
                 this.up = true;
-            }
-            if(e.key === gamejs.event.K_DOWN) {
+                break;
+            case gamejs.event.K_DOWN:
+            case gamejs.event.K_s:
                 this.down = true;
+                break;
             }
-        }
-
-        if(e.type === gamejs.event.KEY_UP) {
-            if(e.key === gamejs.event.K_UP) {
+            break;
+        case gamejs.event.KEY_UP:
+            switch(e.key) {
+            case gamejs.event.K_UP:
+            case gamejs.event.K_w:
                 this.up = false;
-            }
-            if(e.key === gamejs.event.K_DOWN) {
+                break;
+            case gamejs.event.K_DOWN:
+            case gamejs.event.K_s:
                 this.down = false;
-            }
-
-            if(e.key === gamejs.event.K_b) {
-                var branch = new branchjs.Branch(this.maxY, this);
+                break;
+            case gamejs.event.K_b:
+                var branch = new branchjs.Branch(this.maxY, this.prevYs, this);
                 this.branches.push(branch);
-            }
-
-            if(e.key === gamejs.event.K_m) {
+                break;
+            case gamejs.event.K_m:
                 this.branches[this.branches.length - 1].merging = true;
+                break;
             }
+            break;
         }
-
     };
 
     this.update = function() {
         if(this.up) {
             if(this.y > 0) {
-                this.y-=3;
+                this.y -= SPEED;
             }
         }
 
         if(this.down) {
             if(this.y < this.maxY) {
-                this.y+=3;
+                this.y += SPEED;
             }
         }
 
         this.prevYs.push(this.prevY);
-        if(this.prevYs.length > this.x / 3 + 1 ) {
+        if(this.prevYs.length > this.x / SPEED + 1 ) {
             this.prevYs.shift();
         }
         this.prevY = this.y;
@@ -75,8 +83,11 @@ var Player = function(maxY) {
 
         gamejs.draw.circle(surface, '#000', [this.x, 48 + this.y], this.width);
 
-        for(var i = 0; i < this.x; i += 3) {
-            gamejs.draw.line(surface, '#000', [i-3, 48 + this.prevYs[(i-3)/3]], [i, 48 + this.prevYs[i/3]], 3);
+        for(var i = 0; i < this.x; i += SPEED) {
+            gamejs.draw.line(surface, '#000', 
+                             [i-SPEED, 48 + this.prevYs[(i-SPEED)/SPEED]], 
+                             [i, 48 + this.prevYs[i/SPEED]], 
+                             3);
         }
 
         gamejs.draw.circle(surface, '#fff', [this.x, 48 + this.y], this.width + 1, 2);
